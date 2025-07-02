@@ -24,11 +24,16 @@
   ],
   "type": "module",
   "packageManager": "pnpm@10.10.0",
+  "main": "dist/index.js",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "build": "tsc",
+    "ci": "npm run build",
+    "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.2",
     "typescript": "^5.8.3"
   }
 }
