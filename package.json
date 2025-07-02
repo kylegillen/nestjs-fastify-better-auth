@@ -22,5 +22,13 @@
   "files": [
     "dist"
   ],
-  "type": "module"
+  "type": "module",
+  "packageManager": "pnpm@10.10.0",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
 }
