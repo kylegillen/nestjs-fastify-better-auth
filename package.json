@@ -1,8 +1,19 @@
 {
   "name": "@kylegillen/nestjs-fastify-better-auth",
+  "type": "module",
   "version": "1.0.0",
+  "packageManager": "pnpm@10.10.0",
   "description": "Better Auth for NestJS and Fastify",
+  "author": "Kyle Gillen",
   "license": "MIT",
+  "homepage": "https://github.com/kylegillen/nestjs-fastify-better-auth",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kylegillen/nestjs-fastify-better-auth.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kylegillen/nestjs-fastify-better-auth/issues"
+  },
   "keywords": [
     "nestjs",
     "better-auth",
@@ -10,30 +21,23 @@
     "auth",
     "nestjs-fastify-better-auth"
   ],
-  "homepage": "https://github.com/kylegillen/nestjs-fastify-better-auth",
-  "bugs": {
-    "url": "https://github.com/kylegillen/nestjs-fastify-better-auth/issues"
-  },
-  "author": "Kyle Gillen",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kylegillen/nestjs-fastify-better-auth.git"
-  },
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
-  "type": "module",
-  "packageManager": "pnpm@10.10.0",
-  "main": "dist/index.js",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "build": "tsc",
-    "ci": "npm run build",
+    "ci": "pnpm build && pnpm lint && pnpm check-exports",
     "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.16.2",
     "@arethetypeswrong/cli": "^0.18.2",
+    "eslint": "^9.30.1",
     "typescript": "^5.8.3"
   }
 }
