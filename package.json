@@ -1,0 +1,26 @@
+{
+  "name": "@kylegillen/nestjs-fastify-better-auth",
+  "version": "1.0.0",
+  "description": "Better Auth for NestJS and Fastify",
+  "license": "MIT",
+  "keywords": [
+    "nestjs",
+    "better-auth",
+    "fastify",
+    "auth",
+    "nestjs-fastify-better-auth"
+  ],
+  "homepage": "https://github.com/kylegillen/nestjs-fastify-better-auth",
+  "bugs": {
+    "url": "https://github.com/kylegillen/nestjs-fastify-better-auth/issues"
+  },
+  "author": "Kyle Gillen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kylegillen/nestjs-fastify-better-auth.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module"
+}
