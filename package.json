@@ -27,17 +27,31 @@
   ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "prepublishOnly": "npm run ci",
     "build": "tsc",
-    "ci": "pnpm build && pnpm lint && pnpm check-exports",
+    "dev": "vitest",
+    "ci": "pnpm build && pnpm lint && pnpm check-exports && pnpm test",
+    "local-release": "changeset version && changeset publish",
     "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/core": "^11.1.3",
+    "better-auth": "^1.2.12",
+    "fastify": "^5.4.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.16.2",
     "@arethetypeswrong/cli": "^0.18.2",
+    "@changesets/cli": "^2.29.5",
+    "@types/node": "^24.0.10",
+    "@vitest/coverage-v8": "^3.2.4",
     "eslint": "^9.30.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5",
+    "unplugin-swc": "^1.5.5",
+    "vitest": "^3.2.4"
   }
 }

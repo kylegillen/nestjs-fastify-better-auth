@@ -1,27 +1,40 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "es2022",
     "lib": [
-      "es2022"
+      "es2024",
+      "ESNext.Array",
+      "ESNext.Collection",
+      "ESNext.Iterator"
     ],
     "moduleDetection": "force",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "rootDir": "src",
     "module": "NodeNext",
+    "moduleResolution": "node16",
     "resolveJsonModule": true,
-    "allowJs": true,
+    "types": [
+      "node"
+    ],
+    "allowImportingTsExtensions": true,
     "strict": true,
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
     "declaration": true,
+    "noEmit": true,
     "outDir": "dist",
     "sourceMap": true,
     "esModuleInterop": true,
+    "isolatedDeclarations": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
   "exclude": [
     "eslint.config.mjs",
+    "vitest.config.ts",
     "./dist/**/*"
   ]
 }
