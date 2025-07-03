@@ -8,4 +8,11 @@ export default antfu({
     quotes: 'single',
     semi: false,
   },
+}, {
+  files: ['**/*.ts'],
+  rules: {
+    'no-useless-return': ['off'],
+    'curly': ['off'],
+    'ts/explicit-function-return-type': ['off'],
+  },
 })
