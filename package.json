@@ -27,10 +27,10 @@
   ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "prepublishOnly": "pnpm ci",
+    "prepublishOnly": "pnpm ci:publish",
     "build": "tsc",
     "dev": "vitest",
-    "ci": "pnpm build && pnpm lint && pnpm check-exports && pnpm test",
+    "ci:publish": "pnpm build && pnpm lint && pnpm check-exports && pnpm test",
     "local-release": "changeset version && changeset publish",
     "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
     "lint": "eslint",
