@@ -110,9 +110,9 @@ export class AuthModule implements NestModule, OnModuleInit {
             response.body
               ? await response.text()
               : {
-                status: response.status,
-                message: response.statusText,
-              },
+                  status: response.status,
+                  message: response.statusText,
+                },
           )
         }
         catch (error) {
