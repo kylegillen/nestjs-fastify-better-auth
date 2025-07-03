@@ -44,9 +44,9 @@ export const Session: ParameterDecorator = createParamDecorator(
 
     return (data === null
       ? {
-          ...request?.session,
-          headers: request?.headers,
-        }
+        ...request?.session,
+        headers: request?.headers,
+      }
       : (request.session as any)?.[(data as keyof UserSession | 'headers')]) as CurrentUserSession
   },
 )

@@ -1,9 +1,10 @@
-import type { MiddlewareConsumer, NestModule, OnModuleInit, Provider } from '@nestjs/common'
-import type { Auth } from 'better-auth'
+import type { DynamicModule, MiddlewareConsumer, NestModule, OnModuleInit, Provider } from '@nestjs/common'
+import type { Auth, BetterAuthOptions } from 'better-auth'
 import type { FastifyInstance, FastifyReply as Reply, FastifyRequest as Request } from 'fastify'
 
 import { Inject, Logger, Module } from '@nestjs/common'
 import { APP_FILTER, DiscoveryModule, DiscoveryService, HttpAdapterHost, MetadataScanner } from '@nestjs/core'
+import { betterAuth } from 'better-auth'
 import { createAuthMiddleware } from 'better-auth/api'
 import { APIErrorExceptionFilter } from './api-error-exception-filter.ts'
 import { AuthService } from './auth-service.ts'
@@ -18,12 +19,13 @@ interface AuthModuleOptions {
   // disableBodyParser?: boolean
 }
 
-interface AuthModuleConfig {
-  global: boolean
-  module: typeof AuthModule
-  providers: Provider[]
-  exports: (Provider | typeof AuthService)[]
-}
+// interface AuthModuleConfig {
+//   global: boolean
+//   module: typeof AuthModule
+//   providers: Provider[]
+//   exports: (Provider | typeof AuthService)[]
+// }
+
 const HOOKS = [
   { metadataKey: BEFORE_HOOK_KEY, hookType: 'before' as const },
   { metadataKey: AFTER_HOOK_KEY, hookType: 'after' as const },
@@ -108,9 +110,9 @@ export class AuthModule implements NestModule, OnModuleInit {
             response.body
               ? await response.text()
               : {
-                  status: response.status,
-                  message: response.statusText,
-                },
+                status: response.status,
+                message: response.statusText,
+              },
           )
         }
         catch (error) {
@@ -145,21 +147,69 @@ export class AuthModule implements NestModule, OnModuleInit {
     }
   }
 
-  static forRootAsync(
-    auth: Auth,
-    options: AuthModuleOptions = {},
-  ): AuthModuleConfig {
-    // Initialize hooks with an empty object if undefined
-    // Without this initialization, the setupHook method won't be able to properly override hooks
-    // It won't throw an error, but any hook functions we try to add won't be called
-    auth.options.hooks = {
-      ...auth.options.hooks,
-    }
+  // static forRoot(
+  //   auth: Auth,
+  //   options: AuthModuleOptions = {},
+  // ): AuthModuleConfig {
+  // Initialize hooks with an empty object if undefined
+  // Without this initialization, the setupHook method won't be able to properly override hooks
+  // It won't throw an error, but any hook functions we try to add won't be called
+  //   auth.options.hooks = {
+  //     ...auth.options.hooks,
+  //   }
 
+  //   const providers: Provider[] = [
+  //     {
+  //       provide: AUTH_INSTANCE_KEY,
+  //       useValue: auth,
+  //     },
+  //     {
+  //       provide: AUTH_MODULE_OPTIONS_KEY,
+  //       useValue: options,
+  //     },
+  //     AuthService,
+  //   ]
+
+  //   if (!options.disableExceptionFilter) {
+  //     providers.push({
+  //       provide: APP_FILTER,
+  //       useClass: APIErrorExceptionFilter,
+  //     })
+  //   }
+
+  //   return {
+  //     global: true,
+  //     module: AuthModule,
+  //     providers,
+  //     exports: [
+  //       {
+  //         provide: AUTH_INSTANCE_KEY,
+  //         useValue: auth,
+  //       },
+  //       {
+  //         provide: AUTH_MODULE_OPTIONS_KEY,
+  //         useValue: options,
+  //       },
+  //       AuthService,
+  //     ],
+  //   }
+  // }
+
+  static forRootAsync(
+    config: {
+      useFactory: (...args: any[]) => Promise<BetterAuthOptions> | BetterAuthOptions
+      inject?: any[]
+    },
+    options: AuthModuleOptions = {},
+  ): DynamicModule {
     const providers: Provider[] = [
       {
         provide: AUTH_INSTANCE_KEY,
-        useValue: auth,
+        useFactory: async (...args: any[]) => {
+          const betterAuthConfig = await config.useFactory(...args)
+          return betterAuth(betterAuthConfig)
+        },
+        inject: config.inject || [],
       },
       {
         provide: AUTH_MODULE_OPTIONS_KEY,
@@ -180,10 +230,7 @@ export class AuthModule implements NestModule, OnModuleInit {
       module: AuthModule,
       providers,
       exports: [
-        {
-          provide: AUTH_INSTANCE_KEY,
-          useValue: auth,
-        },
+        AUTH_INSTANCE_KEY,
         {
           provide: AUTH_MODULE_OPTIONS_KEY,
           useValue: options,
