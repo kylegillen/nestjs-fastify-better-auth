@@ -2,7 +2,6 @@
 
 A comprehensive NestJS with Fastify integration library for [Better Auth](https://www.better-auth.com/), providing seamless authentication and authorization for your NestJS applications.
 
-
 ```bash
 # Using npm
 npm install @kylegillen/nestjs-fastify-better-auth

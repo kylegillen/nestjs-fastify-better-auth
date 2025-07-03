@@ -1,7 +1,7 @@
 {
   "name": "@kylegillen/nestjs-fastify-better-auth",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "packageManager": "pnpm@10.10.0",
   "description": "Better Auth for NestJS and Fastify",
   "author": "Kyle Gillen",
@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "prepublishOnly": "npm run ci",
+    "prepublishOnly": "pnpm ci",
     "build": "tsc",
     "dev": "vitest",
     "ci": "pnpm build && pnpm lint && pnpm check-exports && pnpm test",

@@ -1,7 +1,6 @@
-import type { Socket as SocketIOSocket } from 'socket.io'
-
 import type { getSession } from 'better-auth/api'
 import type { FastifyRequest } from 'fastify'
+import type { Socket as SocketIOSocket } from 'socket.io'
 
 interface ClientToServerEvents { }
 interface ServerToClientEvents { }

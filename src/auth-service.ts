@@ -1,4 +1,5 @@
 import type { Auth } from 'better-auth'
+
 import { Inject } from '@nestjs/common'
 import { AUTH_INSTANCE_KEY } from './symbols.ts'
 

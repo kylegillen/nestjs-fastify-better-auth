@@ -1,16 +1,14 @@
 import type { CanActivate, ContextType, ExecutionContext } from '@nestjs/common'
 import type { Auth } from 'better-auth'
-import type { getSession } from 'better-auth/api'
+import type { FastifyRequest } from 'fastify'
+import type { SocketWithUserSession, UserSession } from './auth-types.ts'
 
 import { Inject, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
+import { GqlExecutionContext } from '@nestjs/graphql'
 import { APIError } from 'better-auth/api'
 import { fromNodeHeaders } from 'better-auth/node'
 import { AUTH_INSTANCE_KEY } from './symbols.ts'
-import type { Socket, SocketWithUserSession, UserSession } from './auth-types.ts'
-import { GqlExecutionContext } from '@nestjs/graphql'
-import type { FastifyRequest } from 'fastify'
-
 
 /**
  * NestJS guard that handles authentication for protected routes
@@ -50,30 +48,31 @@ export class AuthGuard implements CanActivate {
     const contextType: ContextType & 'graphql' = context.getType()
 
     /**
-    * Attach session to WebSocket request
-    */
+     * Attach session to WebSocket request
+     */
     if (contextType === 'ws') {
       const socket = context.switchToWs().getClient<SocketWithUserSession>()
       try {
         const session = await this.auth.api.getSession({
           headers: fromNodeHeaders(socket?.handshake?.headers),
         })
-        socket['session'] = session
+        socket.session = session
       }
-      catch (_) {
+      catch {
         socket.disconnect()
         return false
       }
       return true
     }
 
-    let request: FastifyRequest & UserSession;
+    let request: FastifyRequest & UserSession
 
     if (contextType === 'graphql') {
-      const gqlCtx = GqlExecutionContext.create(context);
-      request = gqlCtx.getContext()?.req;
-    } else {
-      request = context.switchToHttp().getRequest();
+      const gqlCtx = GqlExecutionContext.create(context)
+      request = gqlCtx.getContext()?.req
+    }
+    else {
+      request = context.switchToHttp().getRequest()
     }
 
     const session = await this.auth.api.getSession({

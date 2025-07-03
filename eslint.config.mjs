@@ -8,6 +8,9 @@ export default antfu({
     quotes: 'single',
     semi: false,
   },
+  ignores: [
+    'tsconfig.json',
+  ],
 }, {
   files: ['**/*.ts'],
   rules: {

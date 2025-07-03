@@ -1,10 +1,10 @@
 import type { ContextType, CustomDecorator, ExecutionContext } from '@nestjs/common'
 import type { FastifyRequest } from 'fastify'
+import type { CurrentUserSession, UserSession } from './auth-types.ts'
 
 import { createParamDecorator, SetMetadata } from '@nestjs/common'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { AFTER_HOOK_KEY, BEFORE_HOOK_KEY, HOOK_KEY } from './symbols.ts'
-import type { CurrentUserSession, UserSession } from './auth-types.ts'
 
 /**
  * Marks a route or a controller as public, allowing unauthenticated access.
@@ -44,9 +44,9 @@ export const Session: ParameterDecorator = createParamDecorator(
 
     return (data === null
       ? {
-        ...request?.session,
-        headers: request?.headers,
-      }
+          ...request?.session,
+          headers: request?.headers,
+        }
       : (request.session as any)?.[(data as keyof UserSession | 'headers')]) as CurrentUserSession
   },
 )
