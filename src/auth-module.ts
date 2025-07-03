@@ -1,7 +1,8 @@
 import type { DynamicModule, MiddlewareConsumer, NestModule, OnModuleInit, Provider } from '@nestjs/common'
-import type { Auth, BetterAuthOptions } from 'better-auth'
+import type { Auth } from 'better-auth'
 import type { FastifyInstance, FastifyReply as Reply, FastifyRequest as Request } from 'fastify'
 
+import type { AuthAsyncOptions } from './auth-types.ts'
 import { Inject, Logger, Module } from '@nestjs/common'
 import { APP_FILTER, DiscoveryModule, DiscoveryService, HttpAdapterHost, MetadataScanner } from '@nestjs/core'
 import { betterAuth } from 'better-auth'
@@ -9,22 +10,6 @@ import { createAuthMiddleware } from 'better-auth/api'
 import { APIErrorExceptionFilter } from './api-error-exception-filter.ts'
 import { AuthService } from './auth-service.ts'
 import { AFTER_HOOK_KEY, AUTH_INSTANCE_KEY, AUTH_MODULE_OPTIONS_KEY, BEFORE_HOOK_KEY, HOOK_KEY } from './symbols.ts'
-
-/**
- * Configuration options for the AuthModule
- */
-interface AuthModuleOptions {
-  disableExceptionFilter?: boolean
-  // disableTrustedOriginsCors?: boolean
-  // disableBodyParser?: boolean
-}
-
-// interface AuthModuleConfig {
-//   global: boolean
-//   module: typeof AuthModule
-//   providers: Provider[]
-//   exports: (Provider | typeof AuthService)[]
-// }
 
 const HOOKS = [
   { metadataKey: BEFORE_HOOK_KEY, hookType: 'before' as const },
@@ -195,30 +180,24 @@ export class AuthModule implements NestModule, OnModuleInit {
   //   }
   // }
 
-  static forRootAsync(
-    config: {
-      useFactory: (...args: any[]) => Promise<BetterAuthOptions> | BetterAuthOptions
-      inject?: any[]
-    },
-    options: AuthModuleOptions = {},
-  ): DynamicModule {
+  static forRootAsync(opts: AuthAsyncOptions): DynamicModule {
     const providers: Provider[] = [
       {
         provide: AUTH_INSTANCE_KEY,
         useFactory: async (...args: any[]) => {
-          const betterAuthConfig = await config.useFactory(...args)
+          const betterAuthConfig = await opts.useFactory(...args)
           return betterAuth(betterAuthConfig)
         },
-        inject: config.inject || [],
+        inject: opts.inject || [],
       },
       {
         provide: AUTH_MODULE_OPTIONS_KEY,
-        useValue: options,
+        useValue: opts.options,
       },
       AuthService,
     ]
 
-    if (!options.disableExceptionFilter) {
+    if (!opts.options?.disableExceptionFilter) {
       providers.push({
         provide: APP_FILTER,
         useClass: APIErrorExceptionFilter,
@@ -228,12 +207,13 @@ export class AuthModule implements NestModule, OnModuleInit {
     return {
       global: true,
       module: AuthModule,
+      imports: opts.imports || [],
       providers,
       exports: [
         AUTH_INSTANCE_KEY,
         {
           provide: AUTH_MODULE_OPTIONS_KEY,
-          useValue: options,
+          useValue: opts.options,
         },
         AuthService,
       ],

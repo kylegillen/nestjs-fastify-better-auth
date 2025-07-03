@@ -1,3 +1,5 @@
+import type { ModuleMetadata } from '@nestjs/common'
+import type { BetterAuthOptions } from 'better-auth'
 import type { getSession } from 'better-auth/api'
 import type { FastifyRequest } from 'fastify'
 import type { Socket as SocketIOSocket } from 'socket.io'
@@ -31,4 +33,16 @@ export type Socket = SocketIOSocket<
 
 export type SocketWithUserSession = Socket & {
   session: UserSession | null
+}
+
+interface AuthOptions {
+  disableExceptionFilter?: boolean
+  // disableTrustedOriginsCors?: boolean
+  // disableBodyParser?: boolean
+}
+
+export interface AuthAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
+  useFactory: (...args: any[]) => Promise<BetterAuthOptions> | BetterAuthOptions
+  inject?: any[]
+  options?: AuthOptions
 }
