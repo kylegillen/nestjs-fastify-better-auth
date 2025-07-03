@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.0.2
+
+### Patch Changes
+
+- d50ddae: Refactor async function to accept imports.
+
 ## 1.0.1
 
 ### Patch Changes
