@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.0.4
+
+### Patch Changes
+
+- a8c14bb: "Fix better auth return type."
+
 ## 1.0.3
 
 ### Patch Changes
