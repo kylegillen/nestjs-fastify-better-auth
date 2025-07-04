@@ -42,12 +42,12 @@ interface AuthOptions {
 }
 
 export interface AuthModuleOptions {
-  auth: typeof betterAuth
+  auth: ReturnType<typeof betterAuth>
   options?: AuthOptions
 }
 
 export interface AuthAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
-  useFactory: (...args: any[]) => Promise<typeof betterAuth> | typeof betterAuth
+  useFactory: (...args: any[]) => Promise<ReturnType<typeof betterAuth>> | ReturnType<typeof betterAuth>
   inject?: any[]
   options?: AuthOptions
 }
