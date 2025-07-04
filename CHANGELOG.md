@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.0.8
+
+### Patch Changes
+
+- 1a94c9f: Update README.
+
 ## 1.0.7
 
 ### Patch Changes

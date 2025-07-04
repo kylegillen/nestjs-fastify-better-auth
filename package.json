@@ -1,7 +1,7 @@
 {
   "name": "@kylegillen/nestjs-fastify-better-auth",
   "type": "module",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "packageManager": "pnpm@10.10.0",
   "description": "Better Auth for NestJS and Fastify",
   "author": "Kyle Gillen",
