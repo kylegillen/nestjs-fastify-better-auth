@@ -2,10 +2,9 @@ import type { DynamicModule, MiddlewareConsumer, NestModule, OnModuleInit, Provi
 import type { Auth } from 'better-auth'
 import type { FastifyInstance, FastifyReply as Reply, FastifyRequest as Request } from 'fastify'
 
-import type { AuthAsyncOptions } from './auth-types.ts'
+import type { AuthAsyncOptions, AuthModuleOptions } from './auth-types.ts'
 import { Inject, Logger, Module } from '@nestjs/common'
 import { APP_FILTER, DiscoveryModule, DiscoveryService, HttpAdapterHost, MetadataScanner } from '@nestjs/core'
-import { betterAuth } from 'better-auth'
 import { createAuthMiddleware } from 'better-auth/api'
 import { APIErrorExceptionFilter } from './api-error-exception-filter.ts'
 import { AuthService } from './auth-service.ts'
@@ -132,53 +131,53 @@ export class AuthModule implements NestModule, OnModuleInit {
     }
   }
 
-  // static forRoot(
-  //   auth: Auth,
-  //   options: AuthModuleOptions = {},
-  // ): AuthModuleConfig {
-  // Initialize hooks with an empty object if undefined
-  // Without this initialization, the setupHook method won't be able to properly override hooks
-  // It won't throw an error, but any hook functions we try to add won't be called
-  //   auth.options.hooks = {
-  //     ...auth.options.hooks,
-  //   }
+  static forRoot(opts: AuthModuleOptions): DynamicModule {
+    // Initialize hooks with an empty object if undefined
+    // Without this initialization, the setupHook method won't be able to properly override hooks
+    // It won't throw an error, but any hook functions we try to add won't be called
+    const auth = opts.auth as unknown as Auth
+    const options = opts.options ?? {}
 
-  //   const providers: Provider[] = [
-  //     {
-  //       provide: AUTH_INSTANCE_KEY,
-  //       useValue: auth,
-  //     },
-  //     {
-  //       provide: AUTH_MODULE_OPTIONS_KEY,
-  //       useValue: options,
-  //     },
-  //     AuthService,
-  //   ]
+    auth.options.hooks = {
+      ...auth.options.hooks,
+    }
 
-  //   if (!options.disableExceptionFilter) {
-  //     providers.push({
-  //       provide: APP_FILTER,
-  //       useClass: APIErrorExceptionFilter,
-  //     })
-  //   }
+    const providers: Provider[] = [
+      {
+        provide: AUTH_INSTANCE_KEY,
+        useValue: auth,
+      },
+      {
+        provide: AUTH_MODULE_OPTIONS_KEY,
+        useValue: options,
+      },
+      AuthService,
+    ]
 
-  //   return {
-  //     global: true,
-  //     module: AuthModule,
-  //     providers,
-  //     exports: [
-  //       {
-  //         provide: AUTH_INSTANCE_KEY,
-  //         useValue: auth,
-  //       },
-  //       {
-  //         provide: AUTH_MODULE_OPTIONS_KEY,
-  //         useValue: options,
-  //       },
-  //       AuthService,
-  //     ],
-  //   }
-  // }
+    if (!options?.disableExceptionFilter) {
+      providers.push({
+        provide: APP_FILTER,
+        useClass: APIErrorExceptionFilter,
+      })
+    }
+
+    return {
+      global: true,
+      module: AuthModule,
+      providers,
+      exports: [
+        {
+          provide: AUTH_INSTANCE_KEY,
+          useValue: auth,
+        },
+        {
+          provide: AUTH_MODULE_OPTIONS_KEY,
+          useValue: options,
+        },
+        AuthService,
+      ],
+    }
+  }
 
   static forRootAsync(opts: AuthAsyncOptions): DynamicModule {
     const providers: Provider[] = [
@@ -186,7 +185,7 @@ export class AuthModule implements NestModule, OnModuleInit {
         provide: AUTH_INSTANCE_KEY,
         useFactory: async (...args: any[]) => {
           const betterAuthConfig = await opts.useFactory(...args)
-          return betterAuth(betterAuthConfig)
+          return betterAuthConfig
         },
         inject: opts.inject || [],
       },
