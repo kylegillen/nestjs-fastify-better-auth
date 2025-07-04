@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.0.5
+
+### Patch Changes
+
+- d6b14fb: Export type for session. Update README.
+
 ## 1.0.4
 
 ### Patch Changes
