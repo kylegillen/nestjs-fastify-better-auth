@@ -33,7 +33,9 @@ import { auth } from './auth'
 
 @Module({
   imports: [
-    AuthModule.forRoot(auth),
+    AuthModule.forRoot({
+      auth: auth
+    }),
   ],
 })
 export class AppModule {}
@@ -69,7 +71,7 @@ Apply the guard to specific controllers or routes:
 
 ```ts title="app.controller.ts"
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@thallesp/nestjs-better-auth';
+import { AuthGuard, Optional, Public } from '@thallesp/nestjs-better-auth';
 
 @Controller('users')
 @UseGuards(AuthGuard) // Apply to all routes in this controller
@@ -77,6 +79,18 @@ export class UserController {
   @Get('me')
   async getProfile() {
     return { message: "Protected route" };
+  }
+
+  @Optional()
+  @Get('optional')
+  async getOptional() {
+    return { message: "Optional route" };
+  }
+
+  @Public()
+  @Get('public')
+  async getPublic() {
+    return { message: "Public route" };
   }
 }
 ```
