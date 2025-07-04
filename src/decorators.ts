@@ -25,9 +25,9 @@ export const Optional = (): CustomDecorator<string> =>
  * Parameter decorator that extracts the user session from the request.
  * Provides easy access to the authenticated user's session data in controller methods.
  */
-export const Session: ParameterDecorator = createParamDecorator(
+export const Session = createParamDecorator(
   (
-    data: (keyof UserSession | 'headers') | unknown,
+    data: (keyof UserSession | 'headers'),
     ctx: ExecutionContext,
   ): CurrentUserSession => {
     const contextType: ContextType & 'graphql' = ctx.getType()
