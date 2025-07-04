@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.0.3
+
+### Patch Changes
+
+- ac85831: Add sync init function. Make better auth initialization external.
+
 ## 1.0.2
 
 ### Patch Changes
