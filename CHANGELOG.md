@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.0.6
+
+### Patch Changes
+
+- 570d9c9: Fix session decorator.
+
 ## 1.0.5
 
 ### Patch Changes
