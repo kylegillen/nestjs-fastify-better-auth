@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.0.7
+
+### Patch Changes
+
+- 03b50f2: Fix erroneous condition for session decorator.
+
 ## 1.0.6
 
 ### Patch Changes
