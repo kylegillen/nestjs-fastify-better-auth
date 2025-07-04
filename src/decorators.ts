@@ -27,7 +27,7 @@ export const Optional = (): CustomDecorator<string> =>
  */
 export const Session = createParamDecorator(
   (
-    data: (keyof UserSession | 'headers'),
+    data: (keyof UserSession),
     ctx: ExecutionContext,
   ): CurrentUserSession => {
     const contextType: ContextType & 'graphql' = ctx.getType()
@@ -42,7 +42,7 @@ export const Session = createParamDecorator(
       request = ctx.switchToHttp().getRequest()
     }
 
-    return (data === null
+    return ((data === null || data === undefined)
       ? {
           ...request?.session,
           headers: request?.headers,
