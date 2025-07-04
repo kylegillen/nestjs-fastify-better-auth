@@ -12,6 +12,8 @@ export default antfu({
   },
   ignores: [
     'tsconfig.json',
+    'README.md',
+    './src/index.ts',
   ],
 }, {
   files: ['**/*.ts'],
