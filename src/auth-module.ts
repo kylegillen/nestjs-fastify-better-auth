@@ -187,9 +187,7 @@ export class AuthModule implements NestModule, OnModuleInit {
           const betterAuthConfig = await opts.useFactory(...args)
           return betterAuthConfig
         },
-        inject: opts.inject
-          ? [...opts.inject, AuthService]
-          : [AuthService],
+        inject: opts.inject || [],
       },
       {
         provide: AUTH_MODULE_OPTIONS_KEY,
