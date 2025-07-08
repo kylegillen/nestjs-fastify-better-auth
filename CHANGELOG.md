@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.0.10
+
+### Patch Changes
+
+- 7b4cba8: Revert change.
+
 ## 1.0.9
 
 ### Patch Changes
