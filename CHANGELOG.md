@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.0.9
+
+### Patch Changes
+
+- 7d12fed: Inject auth service into async function.
+
 ## 1.0.8
 
 ### Patch Changes
