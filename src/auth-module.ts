@@ -26,7 +26,7 @@ export class AuthModule implements NestModule, OnModuleInit {
   private logger = new Logger(AuthModule.name)
   constructor(
     @Inject(AUTH_INSTANCE_KEY) private readonly auth: Auth,
-    @Inject(AUTH_MODULE_OPTIONS_KEY) private readonly options: AuthOptions,
+    @Inject(AUTH_MODULE_OPTIONS_KEY) private readonly options: AuthOptions | undefined,
     @Inject(DiscoveryService)
     private discoveryService: DiscoveryService,
     @Inject(MetadataScanner)
@@ -57,7 +57,7 @@ export class AuthModule implements NestModule, OnModuleInit {
   }
 
   configure(_: MiddlewareConsumer): void {
-    let basePath = this.options.basePath ?? this.auth.options.basePath ?? '/api/auth'
+    let basePath = this.options?.basePath ?? this.auth.options.basePath ?? '/api/auth'
 
     // Ensure the basePath starts with / and doesn't end with /
     if (!basePath.startsWith('/')) {
