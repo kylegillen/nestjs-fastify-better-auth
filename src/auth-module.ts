@@ -2,7 +2,7 @@ import type { DynamicModule, MiddlewareConsumer, NestModule, OnModuleInit, Provi
 import type { Auth } from 'better-auth'
 import type { FastifyInstance, FastifyReply as Reply, FastifyRequest as Request } from 'fastify'
 
-import type { AuthAsyncOptions, AuthModuleOptions } from './auth-types.ts'
+import type { AuthAsyncOptions, AuthModuleOptions, AuthOptions } from './auth-types.ts'
 import { Inject, Logger, Module } from '@nestjs/common'
 import { APP_FILTER, DiscoveryModule, DiscoveryService, HttpAdapterHost, MetadataScanner } from '@nestjs/core'
 import { createAuthMiddleware } from 'better-auth/api'
@@ -26,6 +26,7 @@ export class AuthModule implements NestModule, OnModuleInit {
   private logger = new Logger(AuthModule.name)
   constructor(
     @Inject(AUTH_INSTANCE_KEY) private readonly auth: Auth,
+    @Inject(AUTH_MODULE_OPTIONS_KEY) private readonly options: AuthOptions,
     @Inject(DiscoveryService)
     private discoveryService: DiscoveryService,
     @Inject(MetadataScanner)
@@ -56,7 +57,7 @@ export class AuthModule implements NestModule, OnModuleInit {
   }
 
   configure(_: MiddlewareConsumer): void {
-    let basePath = this.auth.options.basePath ?? '/api/auth'
+    let basePath = this.options.basePath ?? this.auth.options.basePath ?? '/api/auth'
 
     // Ensure the basePath starts with / and doesn't end with /
     if (!basePath.startsWith('/')) {

@@ -35,8 +35,13 @@ export type SocketWithUserSession = Socket & {
   session: UserSession | null
 }
 
-interface AuthOptions {
+export interface AuthOptions {
   disableExceptionFilter?: boolean
+  /**
+   * Base path to register routes on. If not set, the Better Auth config value is used.
+   * This does not affect URL generation/redirect, or other features of Better Auth.
+   */
+  basePath?: string
   // disableTrustedOriginsCors?: boolean
   // disableBodyParser?: boolean
 }
