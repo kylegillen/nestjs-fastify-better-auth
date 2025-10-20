@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.1.2
+
+### Patch Changes
+
+- ccf2722: Add better auth as dev dep for types
+
 ## 1.1.1
 
 ### Patch Changes
