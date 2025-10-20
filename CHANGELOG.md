@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.1.1
+
+### Patch Changes
+
+- 4f7b84b: Update dependency versions
+
 ## 1.1.0
 
 ### Minor Changes
