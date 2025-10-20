@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.1.3
+
+### Patch Changes
+
+- cf0a937: Clean dist folder
+
 ## 1.1.2
 
 ### Patch Changes
