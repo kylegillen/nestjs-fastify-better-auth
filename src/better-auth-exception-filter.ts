@@ -5,10 +5,10 @@ import { Catch } from '@nestjs/common'
 import { APIError } from 'better-auth/api'
 
 @Catch(APIError)
-export class APIErrorExceptionFilter implements ExceptionFilter {
+export class BetterAuthExceptionFilter implements ExceptionFilter {
   catch(exception: APIError, host: ArgumentsHost): void {
-    const ctx = host.switchToHttp()
-    const response = ctx.getResponse<Reply>()
+    const context = host.switchToHttp()
+    const response = context.getResponse<Reply>()
     const status = exception.statusCode
     const message = exception.body?.message
 

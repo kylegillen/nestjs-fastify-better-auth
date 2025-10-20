@@ -1,6 +1,7 @@
-export * from './auth-guard.js'
-export * from './auth-module.js'
-export * from './auth-service.js'
-export * from './decorators.js'
-
-export type { UserSession } from './auth-types.js'
+export * from './better-auth-exception-filter.ts'
+export * from './better-auth.module.js'
+export * from './better-auth.service.js'
+export * from './constants/hooks.const.ts'
+export * from './decorators/index.js'
+export * from './guards/auth-guard.ts'
+export * from './types/better-auth.type.js'
