@@ -1,4 +1,5 @@
 import path from 'node:path'
+
 import swc from 'unplugin-swc'
 import { defineConfig } from 'vitest/config'
 

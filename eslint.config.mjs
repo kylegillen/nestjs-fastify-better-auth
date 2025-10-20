@@ -21,6 +21,7 @@ export default antfu({
     'tsconfig.build.json',
     '.vscode/',
     '**/*.md',
+    'vitest.config.ts',
   ],
   stylistic: {
     semi: false,

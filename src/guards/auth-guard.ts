@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     @Inject(Reflector) private readonly reflector: Reflector,
     @InjectBetterAuth() private readonly auth: Auth,
-  ) { }
+  ) {}
 
   /**
    * Validates if the current request is authenticated for all REST, GraphQL & Websockets

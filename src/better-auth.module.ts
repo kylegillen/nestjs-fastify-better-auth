@@ -101,9 +101,9 @@ export class BetterAuthModule extends ConfigurableBetterAuthModule implements Ne
             newResponse.body
               ? await newResponse.text()
               : {
-                status: newResponse.status,
-                message: newResponse.statusText,
-              },
+                  status: newResponse.status,
+                  message: newResponse.statusText,
+                },
           )
         }
         catch (error) {

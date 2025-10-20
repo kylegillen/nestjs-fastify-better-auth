@@ -10,7 +10,7 @@ export class BetterAuthService<T extends { api: T['api'] } = Auth> {
   constructor(
     @InjectBetterAuth()
     private readonly auth: T,
-  ) { }
+  ) {}
 
   /**
    * Returns the API endpoints provided by the auth instance
