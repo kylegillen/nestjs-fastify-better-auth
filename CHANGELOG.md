@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 1.1.4
+
+### Patch Changes
+
+- 0474a12: Update packages
+
 ## 1.1.3
 
 ### Patch Changes
