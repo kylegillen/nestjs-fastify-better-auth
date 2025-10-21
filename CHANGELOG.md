@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 2.0.0
+
+### Major Changes
+
+- 3b1a54c: Package refactored and types fixed
+
 ## 1.1.4
 
 ### Patch Changes
