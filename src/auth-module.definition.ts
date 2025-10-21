@@ -1,11 +1,11 @@
-import type { Auth, BetterAuthOptions } from 'better-auth'
-
 import { ConfigurableModuleBuilder } from '@nestjs/common'
 
-export interface AuthModuleOptions<A = Auth<BetterAuthOptions>> {
+import type { Auth } from './auth.types.ts'
+
+export interface AuthModuleOptions<A = Auth> {
   auth: A
   disableTrustedOriginsCors?: boolean
-  disableBodyParser?: boolean
+  // disableBodyParser?: boolean
   disableGlobalAuthGuard?: boolean
 }
 

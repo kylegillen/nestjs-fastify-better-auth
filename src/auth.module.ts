@@ -1,6 +1,5 @@
 import type { DynamicModule, MiddlewareConsumer, NestModule, OnModuleInit } from '@nestjs/common'
 import type { FastifyAdapter } from '@nestjs/platform-fastify'
-import type { Auth } from 'better-auth'
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
 import { Inject, Logger, Module } from '@nestjs/common'
@@ -8,6 +7,7 @@ import { APP_GUARD, DiscoveryModule, DiscoveryService, HttpAdapterHost, Metadata
 import { createAuthMiddleware } from 'better-auth/api'
 
 import type { ASYNC_OPTIONS_TYPE, AuthModuleOptions, OPTIONS_TYPE } from './auth-module.definition.ts'
+import type { Auth } from './auth.types.ts'
 
 import { ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } from './auth-module.definition.ts'
 import { AuthGuard } from './auth.guard.ts'
@@ -100,6 +100,10 @@ export class AuthModule
     ) {
       throw new Error('Function-based trustedOrigins not supported in NestJS. Use string array or disable CORS with disableTrustedOriginsCors: true.')
     }
+
+    // if (!this.options.disableBodyParser) {
+    //   fastifyAdapter.useBodyParser('application/json', true)
+    // }
 
     let basePath = this.options.auth.options.basePath ?? '/api/auth'
 

@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
     private readonly reflector: Reflector,
     @Inject(MODULE_OPTIONS_TOKEN)
     private readonly options: AuthModuleOptions,
-  ) { }
+  ) {}
 
   /**
    * Validates if the current request is authenticated

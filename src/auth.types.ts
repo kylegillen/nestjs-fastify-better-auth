@@ -20,3 +20,5 @@ export type RequestWithSession = (FastifyRequest | Socket) & {
   session: UserSession | null
   user: UserSession['user'] | null
 }
+
+export type Auth = any
