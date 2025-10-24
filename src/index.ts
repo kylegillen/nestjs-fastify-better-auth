@@ -1,5 +1,6 @@
 export * from './auth.guard.ts'
 export * from './auth.module.ts'
 export * from './auth.service.ts'
+export * from './auth.types.ts'
 export * from './decorators.ts'
 export * from './symbols.ts'
