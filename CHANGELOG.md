@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 2.0.2
+
+### Patch Changes
+
+- 2a8cc76: add correct api types, update fastify package version
+
 ## 2.0.1
 
 ### Patch Changes
