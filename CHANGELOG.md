@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 2.0.1
+
+### Patch Changes
+
+- 0fad3a6: export types
+
 ## 2.0.0
 
 ### Major Changes
