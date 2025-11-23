@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 2.1.0
+
+### Minor Changes
+
+- d135f8c: Add support for oauth providers
+
 ## 2.0.2
 
 ### Patch Changes
