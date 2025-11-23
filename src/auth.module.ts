@@ -1,8 +1,8 @@
 import type { DynamicModule, MiddlewareConsumer, NestModule, OnModuleInit } from '@nestjs/common'
 import type { FastifyAdapter } from '@nestjs/platform-fastify'
-import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 
-import { Inject, Logger, Module } from '@nestjs/common'
+import { Inject, Logger, Module, RequestMethod } from '@nestjs/common'
 import { APP_GUARD, DiscoveryModule, DiscoveryService, HttpAdapterHost, MetadataScanner } from '@nestjs/core'
 import { createAuthMiddleware } from 'better-auth/api'
 
@@ -79,7 +79,7 @@ export class AuthModule
     }
   }
 
-  configure(_consumer: MiddlewareConsumer): void {
+  configure(consumer: MiddlewareConsumer): void {
     const fastifyAdapter = this.adapter.httpAdapter as FastifyAdapter
     const trustedOrigins = this.options.auth.options.trustedOrigins
     // function-based trustedOrigins requires a Request (from web-apis) object to evaluate, which is not available in NestJS (we only have a express Request object)
@@ -101,10 +101,6 @@ export class AuthModule
       throw new Error('Function-based trustedOrigins not supported in NestJS. Use string array or disable CORS with disableTrustedOriginsCors: true.')
     }
 
-    // if (!this.options.disableBodyParser) {
-    //   fastifyAdapter.useBodyParser('application/json', true)
-    // }
-
     let basePath = this.options.auth.options.basePath ?? '/api/auth'
 
     // Ensure basePath starts with /
@@ -117,51 +113,39 @@ export class AuthModule
       basePath = basePath.slice(0, -1)
     }
 
-    (this.adapter.httpAdapter.getInstance() as FastifyInstance).all(
-      `${basePath}/*`,
-      async (request: FastifyRequest, reply: FastifyReply) => {
-        try {
-          const url = new URL(
-            request.url,
-            `${request.protocol}://${request.hostname}`,
-          )
+    consumer.apply((request: FastifyRequest['raw'], reply: FastifyReply['raw']) => {
+      const headers = new Headers()
+      for (const [key, value] of Object.entries(request.headers)) {
+        if (value) {
+          headers.append(key, value.toString())
+        }
+      }
 
-          const headers = new Headers()
-          for (const [key, value] of Object.entries(request.headers)) {
-            if (value) {
-              headers.append(key, value.toString())
-            }
-          }
+      let body = ''
+      request.on('data', chunk => (body += chunk))
 
-          const newRequest = new Request(url.toString(), {
+      request.on('end', async () => {
+        // Create Fetch API-compatible request
+        const newRequest = new Request(
+          `https://${request.headers.host}${(request as any).originalUrl}`,
+          {
             method: request.method,
             headers,
-            body: request.body ? JSON.stringify(request.body) : undefined,
-          })
+            body: body || undefined,
+          },
+        )
 
-          const response = await this.options.auth.handler(newRequest)
-          reply.status(response.status)
-          for (const [key, value] of response.headers.entries()) {
-            reply.header(key, value)
-          }
-          reply.send(
-            response.body
-              ? await response.text()
-              : {
-                  status: response.status,
-                  message: response.statusText,
-                },
-          )
-        }
-        catch (error) {
-          this.logger.fatal(`Better auth error ${String(error)}`)
-          reply.status(500).send({
-            error: 'Internal authentication error',
-            code: 'AUTH_FAILURE',
-          })
-        }
-      },
-    )
+        // Process authentication request
+        const response = await this.options.auth.handler(newRequest)
+
+        reply.setHeaders(response.headers)
+        reply.statusCode = response.status
+
+        reply.end(response.body
+          ? await response.text()
+          : null)
+      })
+    }).forRoutes({ path: `${basePath}/*path`, method: RequestMethod.ALL })
   }
 
   private setupHooks(
@@ -203,11 +187,11 @@ export class AuthModule
         ...(options.disableGlobalAuthGuard
           ? []
           : [
-              {
-                provide: APP_GUARD,
-                useClass: AuthGuard,
-              },
-            ]),
+            {
+              provide: APP_GUARD,
+              useClass: AuthGuard,
+            },
+          ]),
       ],
     }
   }
@@ -221,9 +205,9 @@ export class AuthModule
       = typeof argument1 === 'object' && argument1 !== null && 'auth' in (argument1 as object)
         ? (argument1 as typeof OPTIONS_TYPE)
         : ({
-            ...argument2,
-            auth: argument1 as Auth,
-          } as typeof OPTIONS_TYPE)
+          ...argument2,
+          auth: argument1 as Auth,
+        } as typeof OPTIONS_TYPE)
 
     const forRootResult = super.forRoot(normalizedOptions)
 
@@ -234,11 +218,11 @@ export class AuthModule
         ...(normalizedOptions.disableGlobalAuthGuard
           ? []
           : [
-              {
-                provide: APP_GUARD,
-                useClass: AuthGuard,
-              },
-            ]),
+            {
+              provide: APP_GUARD,
+              useClass: AuthGuard,
+            },
+          ]),
       ],
     }
   }

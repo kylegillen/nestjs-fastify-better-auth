@@ -29,6 +29,7 @@ export default antfu({
     endOfLine: 'auto',
   },
   rules: {
+    'no-console': 'warn',
     'unicorn/prefer-top-level-await': 'off',
     'unicorn/no-lonely-if': 'off',
     'unicorn/no-array-callback-reference': 'off',
@@ -42,6 +43,7 @@ export default antfu({
     ],
     'test/prefer-lowercase-title': 'off',
     'style/jsx-self-closing-comp': 'error',
+    'style/indent': ['error', 2],
     'curly': 'off',
     'perfectionist/sort-imports': [
       'error',

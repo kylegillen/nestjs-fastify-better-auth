@@ -1,3 +1,4 @@
+import type { Auth as BetterAuth } from 'better-auth'
 import type { getSession } from 'better-auth/api'
 import type { FastifyRequest } from 'fastify'
 import type { Socket } from 'socket.io'
@@ -21,4 +22,4 @@ export type RequestWithSession = (FastifyRequest | Socket) & {
   user: UserSession['user'] | null
 }
 
-export type Auth = any
+export type Auth = BetterAuth

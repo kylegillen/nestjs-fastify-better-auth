@@ -15,7 +15,7 @@ export class AuthService<
   constructor(
     @Inject(MODULE_OPTIONS_TOKEN)
     private readonly options: AuthModuleOptions<T>,
-  ) { }
+  ) {}
 
   /**
    * Returns the API endpoints provided by the auth instance

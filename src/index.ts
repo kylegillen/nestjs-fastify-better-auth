@@ -1,3 +1,4 @@
+export * from './auth-module.definition.ts'
 export * from './auth.guard.ts'
 export * from './auth.module.ts'
 export * from './auth.service.ts'
