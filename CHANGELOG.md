@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 2.1.1
+
+### Patch Changes
+
+- 767445a: chore: bump better-auth to version 1.4
+
 ## 2.1.0
 
 ### Minor Changes
