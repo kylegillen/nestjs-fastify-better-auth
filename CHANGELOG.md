@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 2.1.2
+
+### Patch Changes
+
+- cf430ec: Fix: extra module options not being merged
+
 ## 2.1.1
 
 ### Patch Changes
