@@ -180,18 +180,35 @@ export class AuthModule
 
   static forRootAsync(options: typeof ASYNC_OPTIONS_TYPE): DynamicModule {
     const forRootAsyncResult = super.forRootAsync(options)
+
+    const providers = forRootAsyncResult.providers?.map((provider) => {
+      if ((provider as any).provide === MODULE_OPTIONS_TOKEN) {
+        const original = provider as any
+        return {
+          ...original,
+          useFactory: async (...arguments_: any[]) => {
+            const baseOptions = await original.useFactory(...arguments_)
+            return {
+              ...baseOptions,
+              disableTrustedOriginsCors: options.disableTrustedOriginsCors ?? false,
+              disableGlobalAuthGuard: options.disableGlobalAuthGuard ?? false,
+            }
+          },
+        }
+      }
+      return provider
+    })
+
     return {
-      ...super.forRootAsync(options),
+      ...forRootAsyncResult,
       providers: [
-        ...(forRootAsyncResult.providers ?? []),
+        ...providers ?? [],
         ...(options.disableGlobalAuthGuard
           ? []
-          : [
-            {
-              provide: APP_GUARD,
-              useClass: AuthGuard,
-            },
-          ]),
+          : [{
+            provide: APP_GUARD,
+            useClass: AuthGuard,
+          }]),
       ],
     }
   }
@@ -209,7 +226,11 @@ export class AuthModule
           auth: argument1 as Auth,
         } as typeof OPTIONS_TYPE)
 
-    const forRootResult = super.forRoot(normalizedOptions)
+    const forRootResult = super.forRoot({
+      ...normalizedOptions,
+      disableTrustedOriginsCors: normalizedOptions.disableTrustedOriginsCors ?? false,
+      disableGlobalAuthGuard: normalizedOptions.disableGlobalAuthGuard ?? false,
+    })
 
     return {
       ...forRootResult,
@@ -217,12 +238,10 @@ export class AuthModule
         ...(forRootResult.providers ?? []),
         ...(normalizedOptions.disableGlobalAuthGuard
           ? []
-          : [
-            {
-              provide: APP_GUARD,
-              useClass: AuthGuard,
-            },
-          ]),
+          : [{
+            provide: APP_GUARD,
+            useClass: AuthGuard,
+          }]),
       ],
     }
   }
