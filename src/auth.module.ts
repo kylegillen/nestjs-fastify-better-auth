@@ -1,5 +1,4 @@
 import type { DynamicModule, MiddlewareConsumer, NestModule, OnModuleInit } from '@nestjs/common'
-import type { FastifyAdapter } from '@nestjs/platform-fastify'
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
 import { Inject, Logger, Module, RequestMethod } from '@nestjs/common'
@@ -80,26 +79,27 @@ export class AuthModule
   }
 
   configure(consumer: MiddlewareConsumer): void {
-    const fastifyAdapter = this.adapter.httpAdapter as FastifyAdapter
-    const trustedOrigins = this.options.auth.options.trustedOrigins
+    // const fastifyAdapter = this.adapter.httpAdapter as FastifyAdapter
+    // const trustedOrigins = this.options.auth.options.trustedOrigins
     // function-based trustedOrigins requires a Request (from web-apis) object to evaluate, which is not available in NestJS (we only have a express Request object)
     // if we ever need this, take a look at better-call which show an implementation for this
-    const isNotFunctionBased = trustedOrigins && Array.isArray(trustedOrigins)
 
-    if (!this.options.disableTrustedOriginsCors && isNotFunctionBased) {
-      fastifyAdapter.enableCors({
-        origin: trustedOrigins,
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        credentials: true,
-      })
-    }
-    else if (
-      trustedOrigins
-      && !this.options.disableTrustedOriginsCors
-      && !isNotFunctionBased
-    ) {
-      throw new Error('Function-based trustedOrigins not supported in NestJS. Use string array or disable CORS with disableTrustedOriginsCors: true.')
-    }
+    // const isNotFunctionBased = trustedOrigins && Array.isArray(trustedOrigins)
+
+    // if (!this.options.disableTrustedOriginsCors && isNotFunctionBased) {
+    //   fastifyAdapter.enableCors({
+    //     origin: trustedOrigins,
+    //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    //     credentials: true,
+    //   })
+    // }
+    // else if (
+    //   trustedOrigins
+    //   && !this.options.disableTrustedOriginsCors
+    //   && !isNotFunctionBased
+    // ) {
+    //   throw new Error('Function-based trustedOrigins not supported in NestJS. Use string array or disable CORS with disableTrustedOriginsCors: true.')
+    // }
 
     let basePath = this.options.auth.options.basePath ?? '/api/auth'
 
@@ -190,7 +190,7 @@ export class AuthModule
             const baseOptions = await original.useFactory(...arguments_)
             return {
               ...baseOptions,
-              disableTrustedOriginsCors: options.disableTrustedOriginsCors ?? false,
+              // disableTrustedOriginsCors: options.disableTrustedOriginsCors ?? false,
               disableGlobalAuthGuard: options.disableGlobalAuthGuard ?? false,
             }
           },
@@ -228,7 +228,7 @@ export class AuthModule
 
     const forRootResult = super.forRoot({
       ...normalizedOptions,
-      disableTrustedOriginsCors: normalizedOptions.disableTrustedOriginsCors ?? false,
+      // disableTrustedOriginsCors: normalizedOptions.disableTrustedOriginsCors ?? false,
       disableGlobalAuthGuard: normalizedOptions.disableGlobalAuthGuard ?? false,
     })
 

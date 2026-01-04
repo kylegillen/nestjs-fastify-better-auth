@@ -4,7 +4,7 @@ import type { Auth } from './auth.types.ts'
 
 export interface AuthModuleOptions<A = Auth> {
   auth: A
-  disableTrustedOriginsCors?: boolean
+  // disableTrustedOriginsCors?: boolean
   // disableBodyParser?: boolean
   disableGlobalAuthGuard?: boolean
 }
@@ -21,7 +21,7 @@ export const {
   .setClassMethodName('forRoot')
   .setExtras({
     isGlobal: true,
-    disableTrustedOriginsCors: false,
+    // disableTrustedOriginsCors: false,
     disableBodyParser: false,
     disableGlobalAuthGuard: false,
   }, (definition, extras) => {
