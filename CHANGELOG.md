@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 2.1.3
+
+### Patch Changes
+
+- de6a937: fix: remove disable cors option
+
 ## 2.1.2
 
 ### Patch Changes
