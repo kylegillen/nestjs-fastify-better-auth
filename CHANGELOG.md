@@ -1,5 +1,11 @@
 # @kylegillen/nestjs-fastify-better-auth
 
+## 2.1.4
+
+### Patch Changes
+
+- 36b158e: Add CORS headers manually in middleware
+
 ## 2.1.3
 
 ### Patch Changes
