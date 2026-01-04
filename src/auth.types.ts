@@ -25,7 +25,6 @@ export type RequestWithSession = (FastifyRequest | Socket) & {
 export type Auth = BetterAuth
 
 export interface ExtraOptions {
-  disableTrustedOriginsCors: boolean
   disableBodyParser: boolean
   disableGlobalAuthGuard: boolean
 }

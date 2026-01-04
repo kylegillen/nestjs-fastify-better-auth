@@ -79,27 +79,8 @@ export class AuthModule
   }
 
   configure(consumer: MiddlewareConsumer): void {
-    // const fastifyAdapter = this.adapter.httpAdapter as FastifyAdapter
-    // const trustedOrigins = this.options.auth.options.trustedOrigins
-    // function-based trustedOrigins requires a Request (from web-apis) object to evaluate, which is not available in NestJS (we only have a express Request object)
-    // if we ever need this, take a look at better-call which show an implementation for this
-
-    // const isNotFunctionBased = trustedOrigins && Array.isArray(trustedOrigins)
-
-    // if (!this.options.disableTrustedOriginsCors && isNotFunctionBased) {
-    //   fastifyAdapter.enableCors({
-    //     origin: trustedOrigins,
-    //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    //     credentials: true,
-    //   })
-    // }
-    // else if (
-    //   trustedOrigins
-    //   && !this.options.disableTrustedOriginsCors
-    //   && !isNotFunctionBased
-    // ) {
-    //   throw new Error('Function-based trustedOrigins not supported in NestJS. Use string array or disable CORS with disableTrustedOriginsCors: true.')
-    // }
+    const trustedOrigins = this.options.auth.options.trustedOrigins
+    const isArrayOrigins = trustedOrigins && Array.isArray(trustedOrigins)
 
     let basePath = this.options.auth.options.basePath ?? '/api/auth'
 
@@ -114,6 +95,23 @@ export class AuthModule
     }
 
     consumer.apply((request: FastifyRequest['raw'], reply: FastifyReply['raw']) => {
+      const origin = request.headers.origin
+
+      // Add CORS headers if origin is trusted
+      if (origin && isArrayOrigins && trustedOrigins.includes(origin)) {
+        reply.setHeader('Access-Control-Allow-Origin', origin)
+        reply.setHeader('Access-Control-Allow-Credentials', 'true')
+        reply.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        reply.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+      }
+
+      // Handle preflight
+      if (request.method === 'OPTIONS') {
+        reply.statusCode = 204
+        reply.end()
+        return
+      }
+
       const headers = new Headers()
       for (const [key, value] of Object.entries(request.headers)) {
         if (value) {
@@ -190,7 +188,6 @@ export class AuthModule
             const baseOptions = await original.useFactory(...arguments_)
             return {
               ...baseOptions,
-              // disableTrustedOriginsCors: options.disableTrustedOriginsCors ?? false,
               disableGlobalAuthGuard: options.disableGlobalAuthGuard ?? false,
             }
           },
@@ -228,7 +225,6 @@ export class AuthModule
 
     const forRootResult = super.forRoot({
       ...normalizedOptions,
-      // disableTrustedOriginsCors: normalizedOptions.disableTrustedOriginsCors ?? false,
       disableGlobalAuthGuard: normalizedOptions.disableGlobalAuthGuard ?? false,
     })
 
